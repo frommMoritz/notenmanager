@@ -54,6 +54,7 @@ class SchoolYear
     {
         $this->marks = new ArrayCollection();
         $this->subjects = new ArrayCollection();
+        $this->created_at = new \Datetime();
     }
 
     public function getId()

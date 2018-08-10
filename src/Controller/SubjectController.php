@@ -13,6 +13,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -44,6 +45,7 @@ class SubjectController extends AbstractController
             ->add('name', TextType::class, ['label' => 'Name'])
             ->add('schoolyear', ChoiceType::class, [
                 'choices' => $this->getUser()->getSchoolYears(),
+                'choice_translation_domain' => false,
                 'label' => 'Schuljahr',
                 'choice_label' => function($year, $key, $value) {
                     /** @var SchoolYear $subject */
@@ -52,8 +54,13 @@ class SubjectController extends AbstractController
                     /** @var SchoolYear $subject */
                     return $year->getId();
                 }
-                ])
-            ->add('save', SubmitType::class, ['label' => 'Speichern'])
+                ]);
+            if ($this->authChecker->isGranted('ROLE_ADMIN')) {
+                $form->add('is_template', CheckboxType::class, ['label' => 'Fach als Vorlage Markieren']);
+            }
+
+
+        $form = $form->add('save', SubmitType::class, ['label' => 'Speichern'])
             ->getForm();
 
             $form->handleRequest($request);
@@ -79,20 +86,27 @@ class SubjectController extends AbstractController
             return $this->redirectToRoute('year');
         }
         $year = $this->getDoctrine()->getRepository(SchoolYear::class)->find($year);
-        if (($this->getUser()->getId() != $year->getUser()->getId()) && !$this->authChecker->isGranted('ROLE_ADMIN')) {
+        if (($this->getUser()->getId() != $year->getUser()->getId())) {
             throw $this->createAccessDeniedException($this->translator->trans('Du hast keien Rechte auf diese Seite zuzugreifen'));
         }
         $subjects = $year->getSubjects();
         foreach ($subjects as $item) {
-            $_marks = $item->getMarks();
-            $marks = [];
+            $marks = $item->getMarks();
+            // $marks = [];
             $markRange = $this->getUser()->getMarkRange();
-            foreach ($_marks as $item) {
-                $marks[] = $item->getMark();
-            }
+            // foreach ($_marks as $item) {
+            //     $marks[] = $item->getMark();
+            // }
             if(count($marks)) {
-                $marks = array_filter($marks);
-                $avgMark = array_sum($marks)/count($marks);
+                // $marks = array_filter($marks);
+                // $avgMark = array_sum($marks)/count($marks);
+                $sum = 0;
+                $amount = 0;
+                foreach ($marks as $mark) {
+                    $sum += $mark->getMark()*$mark->getWeight();
+                    $amount += $mark->getWeight();
+                }
+                $avgMark = $sum /$amount;
                 $map = $this->map($avgMark, $markRange['best'], $markRange['worst'], 1, 6);
                 if ($map < 2.49) {
                     $markColor = 'success';
@@ -107,7 +121,7 @@ class SubjectController extends AbstractController
                 ];
             } else {
                 $averages[] = [
-                    "mark" => 'n/a',
+                    "mark" => '',
                    "markClass" => "light"
                 ];
             }
@@ -121,10 +135,12 @@ class SubjectController extends AbstractController
      */
     public function edit(Subject $subject) {
 
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
         $form = $this->createFormBuilder($subject)
-            ->add('name', TextType::class)
+            ->add('name', TextType::class);
+            if ($this->authChecker->isGranted('ROLE_ADMIN')) {
+                $form->add('is_template', CheckboxType::class, ['label' => 'Fach als Vorlage Markieren']);
+            }
+        $form = $form
             ->add('save', SubmitType::class, ['label' => 'Speichern'])
             ->getForm()
             ->createView();
@@ -136,8 +152,6 @@ class SubjectController extends AbstractController
      */
     public function edit_save(Request $request, Subject $subject) {
 
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
         $entityManager = $this->getDoctrine()->getManager();
         $form = $request->request->get('form');
         $subject->setName($form['name']);
@@ -145,7 +159,7 @@ class SubjectController extends AbstractController
         $entityManager->flush();
         $this->addFlash('highlight', $subject->getId());
         $this->addFlash('success', $this->translator->trans('Gespeichert!'));
-        return $this->redirectToRoute('subject_list_all', ['_fragment' => $subject->getId()]);
+        return $this->redirectToRoute('subject_list_all', ['year' => $subject->getSchoolYear()->getId()]);
     }
 
     /**
@@ -153,8 +167,6 @@ class SubjectController extends AbstractController
      */
 
     public function add_legacy() {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
         $form = $this->createFormBuilder(new Subject)
             ->add('name', TextType::class)
             ->add('save', SubmitType::class, ['label' => 'Hinzufügen'])
@@ -168,8 +180,6 @@ class SubjectController extends AbstractController
      */
     public function add_save(Request $request) {
 
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
         $entityManager = $this->getDoctrine()->getManager();
         $form = $request->request->get('form');
         $subject = new Subject();
@@ -178,6 +188,6 @@ class SubjectController extends AbstractController
         $entityManager->flush();
         $this->addFlash('highlight', $subject->getId());
         $this->addFlash('success', $this->translator->trans('Fach erfolgreich hinzugefügt!'));
-        return $this->redirectToRoute('subject_list_all', ['_fragment' => $subject->getId()]);
+        return $this->redirectToRoute('subject_list_all', ['year' => $subject->getSchoolYear()->getId()]);
     }
 }

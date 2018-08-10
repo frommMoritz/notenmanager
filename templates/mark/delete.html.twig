@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans with {'%subjectName%': mark.subject.name|trans()}%}Note in %subjectName% bearbeiten{% endtrans %}{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <br>
+    <h1>{% trans with {'%subjectName%': mark.subject.name|trans()}%}Note in %subjectName% bearbeiten{% endtrans %}</h1>
+    <br>
+    {{ form_start(deleteForm) }}
+        {{ form_row(deleteForm.delete) }}
+    {{ form_end(deleteForm) }}
+    <a href="{{path("mark_detailed_view", {'subject': mark.subject.id})}}"><button class="btn btn-lg btn-success">Abbrechen</button></a>
+    <ul class="list-group">
+    </ul>
+</div>
+{% endblock %}

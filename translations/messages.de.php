@@ -40,5 +40,16 @@ return [
     'Schlechteste Note' => 'Schlechteste Note',
     'Alte Noten Anpassen?' => 'Alte Noten Anpassen?',
     'Abmelden' => 'Abmelden',
-    'Erstellt' => 'Erstellt'
+    'Erstellt' => 'Erstellt',
+
+    'Einstellungen' => 'Einstellungen',
+    'Schuljahre' => 'Schuljahre',
+    'Deine Schuljahre' => 'Deine Schuljahre',
+    'Neues Schuljahr' => 'Neues Schuljahr',
+    'Neues Schuljahr hinzufügen' => 'Neues Schuljahr hinzufügen',
+    'Fächer' => 'Fächer',
+    'Schuljahr' => 'Schuljahr',
+    'Neues Schulfach hinzufügen' => 'Neues Schulfach hinzufügen',
+    'Fach als Vorlage Markieren' => 'Fach als Vorlage Markieren',
+    'Gewichtung' => 'Gewichtung'
 ];

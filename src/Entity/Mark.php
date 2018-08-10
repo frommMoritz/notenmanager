@@ -52,9 +52,15 @@ class Mark
      */
     private $is_active;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $weight;
+
     public function __construct() {
         $this->created_at = new \Datetime();
         $this->is_active = true;
+        $this->weight = 1;
     }
 
     public function getId()
@@ -130,6 +136,18 @@ class Mark
     public function setIsActive(bool $is_active): self
     {
         $this->is_active = $is_active;
+
+        return $this;
+    }
+
+    public function getWeight(): ?float
+    {
+        return $this->weight;
+    }
+
+    public function setWeight(float $weight): self
+    {
+        $this->weight = $weight;
 
         return $this;
     }

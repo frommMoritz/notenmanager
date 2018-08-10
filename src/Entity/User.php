@@ -68,7 +68,7 @@ class User implements UserInterface, \Serializable
 
     public function __construct() {
         $this->isActive = true;
-        $this->roles = 'ROLE_NOT_ACTIVE';
+        $this->roles = 'ROLE_USER';
         $this->userSettings = new ArrayCollection();
         $this->schoolYears = new ArrayCollection();
     }
@@ -174,6 +174,9 @@ class User implements UserInterface, \Serializable
     {
 
         $markRange = unserialize($this->markRange);
+        if (!is_array($markRange)) {
+            $markRange = [];
+        }
         $markRange = array_merge(['best' => 1,
         'worst' => 6,
         'round' => 2], $markRange);

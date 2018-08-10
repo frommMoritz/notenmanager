@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use App\Entity\SchoolYear;
+use App\Entity\Subject;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -60,5 +62,52 @@ class YearController extends Controller
         return $this->render('year/edit.html.twig', compact('form', 'year'));
 
         return $this->json([$year->getId()]);
+    }
+
+    /**
+     * @Route("/year/add", name="year_add")
+     */
+    public function add(Request $request) {
+        $subjects = $this->getDoctrine()->getRepository(Subject::class)->findBy(['is_template' => true]);
+        $form = $this->createFormBuilder(new SchoolYear())
+            ->add('name', TextType::class, ['label' => 'Name'])
+            ->add('subjects', ChoiceType::class, [
+                'label' => 'Fächer',
+                'required' => false,
+                'multiple' => true,
+                'expanded' => false,
+                'data' => $subjects,
+                'choices' => $subjects,
+                'choice_label' => function($subject, $key, $value) {
+                    /** @var Subject $subject */
+                    return $subject->getName();
+                },
+                'choice_value' => function($subject) {
+                    return $subject->getId();
+                }
+                ])
+            ->add('save', SubmitType::class, ['label' => 'Hinzufügen'])
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $formData = $form->getNormData();
+            $formData->setChangedAt(new \Datetime());
+            $formData->setUser($this->getUser());
+            $subjects = null;
+            foreach ($formData->getSubjects() as $subject) {
+                $s = clone($subject);
+                $formData->removeSubject($subject);
+                $formData->addSubject($s);
+                $entityManager->persist($s);
+                $entityManager->flush();
+                dump($formData);
+            }
+            $entityManager->persist($formData);
+            $entityManager->flush();
+            return $this->redirectToRoute('year');
+        }
+        $form = $form->createView();
+        return $this->render('year/add.html.twig', compact('form'));
     }
 }

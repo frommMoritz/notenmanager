@@ -20,6 +20,7 @@
                     <th>{% trans %}für{% endtrans %}</th>
                     <th>{% trans %}Eingetragen{% endtrans %}</th>
                     <th>{% trans %}Letzte Änderung{% endtrans %}</th>
+                    <th>{% trans %}Gewichtung{% endtrans %}</th>
                     <th></th>
                 </tr>
             </thead>
@@ -30,7 +31,8 @@
                         <td>{{mark.title}}</td>
                         <td>{{mark.createdAt|date('Y-m-d G:i:s')}}</td>
                         <td>{{mark.changedAt|date('Y-m-d G:i:s')}}</td>
-                        <td><a href="{{path('mark_edit', {'mark': mark.id})}}"><i class="fas fa-edit"></i></a></td>
+                        <td>{{mark.weight}}</td>
+                        <td><a href="{{path('mark_edit', {'mark': mark.id})}}"><i class="fas fa-edit"></i></a><a title="wegrauchen" href="{{path('mark_delete', {'mark': mark.id})}}"><i class="fas fa-joint"></i></a></td>
                     </tr>
                 {% endfor %}
             </tbody>

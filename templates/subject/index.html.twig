@@ -9,7 +9,7 @@
     <h1>{% trans %}Alle Fächer {% endtrans %}</h1>
     <a href="{{path("year")}}"><i class="fas fa-long-arrow-alt-left"></i> {% trans %}Zurück{% endtrans %}</a>
     <br>
-    <a href="{{path("subject_add", {"year": year.id})}}"><i class="fas fa-plus-square"></i> {% trans %}Neues Schuljahr{% endtrans %}</a>
+    <a href="{{path('subject_add', {"year": year.id})}}"><i class="fas fa-plus-square"></i> {% trans %}Neues Fach hinzufügen{% endtrans %}</a>
     <br>
     <div class="table-responsive">
         <table class="table">
@@ -33,6 +33,5 @@
             </tbody>
         </table>
     </div>
-    <a href="{{path('subject_add', {"year": year.id})}}"><i class="fas fa-plus-square"></i> {% trans %}Neues Fach hinzufügen{% endtrans %}</a>
 </div>
 {% endblock %}

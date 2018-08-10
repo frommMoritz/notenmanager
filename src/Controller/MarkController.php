@@ -16,12 +16,17 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 use Symfony\Component\Translation\TranslatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -83,6 +88,7 @@ class MarkController extends AbstractController
                 'id' => $mark->getId(),
                 'mark' => $mark->getMark(),
                 'title' => $mark->getTitle(),
+                'weight' => $mark->getWeight(),
                 'createdAt' => $mark->getCreatedAt(),
                 'changedAt' => $mark->getChangedAt(),
                 'color' => $markColor
@@ -101,7 +107,7 @@ class MarkController extends AbstractController
             throw $this->createAccessDeniedException($this->translator->trans('Du hast keien Rechte auf diese Seite zuzugreifen'));
         }
 
-        $subjects = $this->getDoctrine()->getRepository(Subject::class)->findall();
+        $subjects = $this->getDoctrine()->getRepository(Subject::class)->findBy(['schoolyear' => $mark->getSubject()->getSchoolYear()]);
         $markRange = $this->getUser()->getMarkRange();
         $editForm = $this->createFormBuilder($mark)
             ->add('title', TextType::class, ['label' => 'Titel'])
@@ -120,12 +126,8 @@ class MarkController extends AbstractController
                     return $subject->getId();
                 }
                 ])
+            ->add('weight', NumberType::class, ['label' => 'Gewichtung', 'help' => 'Aktuell musst du um eine Note zu löschen, einfach ihre gewichtung auf 0 setzen'])
             ->add('submit', SubmitType::class, ['label' => 'Speichern'])
-            ->getForm();
-
-
-        $deleteForm = $this->createFormBuilder([])
-            ->add('submit', SubmitType::class, ['label' => 'Löschen', 'attr' => ['class' => 'btn-danger']])
             ->getForm();
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -136,21 +138,45 @@ class MarkController extends AbstractController
             dump($formData);
             $entityManager->persist($formData);
             $entityManager->flush();
-            return $this->redirectToRoute('mark_detailed_view', ['subject' => $formData->getSubject()->getId()]);
-        }
-        $deleteForm->handleRequest($request);
-        if ($deleteForm->isSubmitted() && $deleteForm->isValid()) {
-            $subject->delete($formData);
-            $subject->flush();
+            $this->addFlash('success', $this->translator->trans('Änderungen erfolgreich'));
             return $this->redirectToRoute('mark_detailed_view', ['subject' => $formData->getSubject()->getId()]);
         }
         $editForm = $editForm->createView();
-        $deleteForm = $deleteForm->createView();
 
 
         $subject = $mark->getSubject();
-        return $this->render('mark/edit.html.twig', compact('subject', 'editForm', 'deleteForm'));
+        return $this->render('mark/edit.html.twig', compact(
+            'subject'
+            ,'editForm'
+            // ,'deleteForm'
+        ));
         return $this->json([$mark->getId()]);
+    }
+
+    /**
+     * @Route("/mark/delete/{mark}", name="mark_delete")
+     */
+    public function delete(Mark $mark, Request $request) {
+        if ($this->getUser()->getId() != $mark->getSubject()->getSchoolYear()->getUser()->getId()) {
+            throw $this->createAccessDeniedException($this->translator->trans('Du hast keien Rechte auf diese Seite zuzugreifen'));
+        }
+        $deleteForm = $this->createFormBuilder($mark)
+            ->add('delete', SubmitType::class, ['label' => 'Permanent Löschen', 'attr' => ['class' => 'btn-danger']])
+            ->getForm();
+        $deleteForm->handleRequest($request);
+        if ($deleteForm->isSubmitted() && $deleteForm->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $formData = $deleteForm->getNormData();
+            $entityManager->remove($formData);
+            $entityManager->flush();
+            $this->addFlash('success', $this->translator->trans('Löschen erfolgreich'));
+            return $this->redirectToRoute('mark_detailed_view', ['subject' => $formData->getSubject()->getId()]);
+        }
+
+        $deleteForm = $deleteForm->createView();
+        return $this->render('mark/delete.html.twig', compact(
+            'deleteForm', 'mark'
+        ));
     }
 
     /**
@@ -187,6 +213,7 @@ class MarkController extends AbstractController
                 'max' => ($markRange['best'] < $markRange['worst'] ? $markRange['worst'] : $markRange['best']),
                 ]
             ])
+            ->add('weight', NumberType::class, ['label' => 'Gewichtung'])
             ->add('submit', SubmitType::class, ['label' => 'Speichern'])
             ->getForm();
             if (is_null($subject)) {
@@ -209,4 +236,11 @@ class MarkController extends AbstractController
         return $this->render('mark/add.html.twig', compact('form', 'title'));
     }
 
+    /**
+     * @Route("random", name="mark_random")
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function random() {
+
+    }
 }
