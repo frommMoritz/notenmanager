@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}Alle Fächer {% endtrans %}{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <br>
+
+    <h1>{% trans %}Alle Fächer {% endtrans %}</h1>
+    <a href="{{path("year", {"year": year.id})}}"><i class="fas fa-long-arrow-alt-left"></i> {% trans %}Zurück{% endtrans %}</a>
+    <br>
+    <br>
+    <ul class="list-group">
+        <table class="table">
+            <thead>
+                <th>{% trans %}Name{% endtrans %}</th>
+                <th>{% trans %}Erstellt{% endtrans %}</th>
+                <th>{% trans %}Letzte Änderung{% endtrans %}</th>
+                <th>{% trans %}Durchschnitt{% endtrans %}</th>
+                <th></th>
+            </thead>
+            <tbody>
+            {% for subject in subjects %}
+                <tr class="table-{{averages[loop.index-1].markClass}}">
+                    <td><a href="{{path("mark_detailed_view", {"subject": subject.id})}}">{{subject.name|trans()}}</a></td>
+                    <td>{{subject.createdAt|date('Y-m-d G:i:s')}}</td>
+                    <td>{{subject.changedAt|date('Y-m-d G:i:s')}}</td>
+                    <td>{{averages[loop.index-1].mark}}</td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </ul>
+    <a href="{{path('subject_add', {"year": year.id})}}"><i class="fas fa-plus-square"></i> {% trans %}Neues Fach hinzufügen{% endtrans %}</a>
+</div>
+{% endblock %}

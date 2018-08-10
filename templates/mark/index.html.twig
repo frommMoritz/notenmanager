@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %} Deine Noten {% endtrans %}{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <br>
+    <h1>{% trans %}Deine Noten{% endtrans %}</h1>
+
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>{% trans %}Fach{% endtrans %}</th>
+                    <th>{% trans %}Durchschnitt{% endtrans %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subject in subjects %}
+                    <tr>
+                        <td><a href="{{path("mark_detailed_view", {'subject': subject.id})}}"> {{subject.name|trans()}}</a></td>
+                        <td class="{{averages[loop.index-1].markClass}}">{{averages[loop.index-1].mark}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

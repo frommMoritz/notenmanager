@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans with {'%yearName%': year.name} %}Schuljahr %yearName% bearbeiten{% endtrans %}{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>{% trans with {'%yearName%': year.name} %}Schuljahr %yearName% bearbeiten{% endtrans %}</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/fonts/font-awesome/css/all.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+</head>
+    <body>
+    <div class="container">
+    <br>
+    <h5><a href="{{path('default')}}">{% trans %}Startseite{% endtrans %}</a></h5>
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+    <br>
+    <a href="{{path('logout')}}">{% trans %}Abmelden{% endtrans %}</a>
+    <br>
+    {% endif %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">
+            {{message}}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('danger') %}
+        <div class="alert alert-danger" role="alert">
+            {{message}}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('warning') %}
+        <div class="alert alert-warning" role="alert">
+            {{message}}
+        </div>
+    {% endfor %}
+    </div>
+        {% block body %}{% endblock %}
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/popper.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

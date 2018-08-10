@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}Deine Schuljahre{% endtrans %}{% endblock %}
+
+{% block body %}
+<div class="container">
+    <br>
+    <h1>{% trans %}Deine Schuljahre{% endtrans %}</h1>
+    <br>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">{% trans %}Name{% endtrans %}</th>
+                <th scope="col">{% trans %}Erstellt{% endtrans %}</th>
+                <th scope="col">{% trans %}Letzte Änderung{% endtrans %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for year in schoolyears %}
+                <tr{% if year.id in highlights %} class="table-info"{% endif %}>
+                    <td>{{year.name}}</td>
+                    <td>{{year.createdAt|date('Y-m-d G:i:s')}}</td>
+                    <td>{{year.changedAt|date('Y-m-d G:i:s')}}</td>
+                    <td><a href="{{path('year_edit', {'year': year.id})}}"><i class="fas fa-edit"></i></a> <a href="{{path("subject_list_all", {'year': year.id})}}"><i class="fas fa-table"></i></a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

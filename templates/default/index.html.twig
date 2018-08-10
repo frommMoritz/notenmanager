@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello {{ controller_name }}!{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="list-group">
+      <a href="{{ path('subject_list_all') }}" class="list-group-item list-group-item-action">Fächerverwaltung (Admin)</a>
+      <a href="{{ path('mark_list_subjects') }}" class="list-group-item list-group-item-action">Notenverwaltung (User)</a>
+      <a href="{{ path('settings') }}" class="list-group-item list-group-item-action">Einstellungen (User)</a>
+      <a href="{{ path('year') }}" class="list-group-item list-group-item-action">Schuljahre (User)</a>
+    </div>
+</div>
+{% endblock %}

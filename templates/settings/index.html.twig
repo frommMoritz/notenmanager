@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}Persönliche Einstellungen{% endtrans %}{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1>{% trans %}Persönliche Einstellungen{% endtrans %}</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans with {'%subjectName%': subject.name|trans()}%}Fach %subjectName% bearbeiten{% endtrans %}{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <br>
+    <h1>{% trans with {'%subjectName%': subject.name|trans()}%}Fach %subjectName% bearbeiten{% endtrans %}</h1>
+    <br>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+    <ul class="list-group">
+    </ul>
+</div>
+{% endblock %}

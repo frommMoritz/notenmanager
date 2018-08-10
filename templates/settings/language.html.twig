@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}Spracheinstellungen{% endtrans %}{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1>{% trans %}Spracheinstellungen{% endtrans %}</h1>
+    <a href="/"><img src="/img/deutschland-flagge.png" class="border{% if app.request.locale == "de" %} border-primary{% endif %}"></a>
+    <a href="/en"><img src="/img/uk-flaggge.png" class="border{% if app.request.locale == "en" %} border-primary{% endif %}"></a>
+</div>
+{% endblock %}

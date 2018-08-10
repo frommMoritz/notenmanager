@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %} Deine Noten {% endtrans %}{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <br>
+    <h1>{% trans with {'%subjectName%': subject.name|trans()}%}Deine Noten in %subjectName%{% endtrans %}</h1>
+    <br>
+    <a href="{{path("mark_list_subjects")}}">{% trans %}Zurück{% endtrans %}</a>
+    <br>
+    <a href="{{path("mark_add", {"subject":subject.id, "year": subject.schoolyear.id})}}">{% trans %}Neue Note{% endtrans %}</a>
+    <br>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>{% trans %}Note{% endtrans %}</th>
+                    <th>{% trans %}für{% endtrans %}</th>
+                    <th>{% trans %}Eingetragen{% endtrans %}</th>
+                    <th>{% trans %}Letzte Änderung{% endtrans %}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mark in marks %}
+                    <tr class="table-{{mark.color}}">
+                        <td>{{mark.mark|round(round)}}</td>
+                        <td>{{mark.title}}</td>
+                        <td>{{mark.createdAt|date('Y-m-d G:i:s')}}</td>
+                        <td>{{mark.changedAt|date('Y-m-d G:i:s')}}</td>
+                        <td><a href="{{path('mark_edit', {'mark': mark.id})}}"><i class="fas fa-edit"></i></a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

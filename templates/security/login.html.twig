@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}Anmelden{% endtrans %}{% endblock %}
+
+{% block body %}
+<div class="container">
+    {% if error %}
+        <div class="alert alert-warning">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <h1>{% trans %}Anmelden{% endtrans %}</h1>
+    <h5>{% trans with {'%username%': 'user', '%password%': 'user'} %}Zugangsdaten: %username%:%password%{% endtrans %}</h5>
+    <h5>{% trans with {'%username%': 'admin', '%password%': 'admin'} %}Zugangsdaten: %username%:%password%{% endtrans %}</h5>
+    <br>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+</div>
+{% endblock %}
