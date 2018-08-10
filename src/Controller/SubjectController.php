@@ -18,7 +18,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-
 class SubjectController extends AbstractController
 {
     private $translator;
@@ -41,7 +40,6 @@ class SubjectController extends AbstractController
         $years = $this->getDoctrine()->getRepository(SchoolYear::class)->findBy(['user' => $this->getUser()]);
         $_subject = new Subject();
         $_subject->setSchoolYear($year);
-        dump($_subject);
         $form = $this->createFormBuilder($_subject)
             ->add('name', TextType::class, ['label' => 'Name'])
             ->add('schoolyear', ChoiceType::class, [
@@ -49,7 +47,6 @@ class SubjectController extends AbstractController
                 'label' => 'Schuljahr',
                 'choice_label' => function($year, $key, $value) {
                     /** @var SchoolYear $subject */
-                    dump($year);
                     return $year->getName();
                 }, 'choice_value' => function (SchoolYear $year) {
                     /** @var SchoolYear $subject */
@@ -85,17 +82,13 @@ class SubjectController extends AbstractController
         if (($this->getUser()->getId() != $year->getUser()->getId()) && !$this->authChecker->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException($this->translator->trans('Du hast keien Rechte auf diese Seite zuzugreifen'));
         }
-        dump($year->getUser());
-        dump($this->getUser());
         $subjects = $year->getSubjects();
         foreach ($subjects as $item) {
             $_marks = $item->getMarks();
             $marks = [];
             $markRange = $this->getUser()->getMarkRange();
             foreach ($_marks as $item) {
-                if ($this->getUser()->getId() == $item->getUser()->getId()) {
-                    $marks[] = $item->getMark();
-                }
+                $marks[] = $item->getMark();
             }
             if(count($marks)) {
                 $marks = array_filter($marks);

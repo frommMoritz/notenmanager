@@ -5,11 +5,10 @@
 {% block body %}
 <div class="container">
     <h1>Hello {{ controller_name }}! ✅</h1>
+    <h2><a href="{{path("mark_add", {"year":years|last.id})}}"><i class="fas fa-plus-square"></i> {% trans %}Neue Note{% endtrans %}</a></h2>
     <div class="list-group">
-      <a href="{{ path('subject_list_all') }}" class="list-group-item list-group-item-action">Fächerverwaltung (Admin)</a>
-      <a href="{{ path('mark_list_subjects') }}" class="list-group-item list-group-item-action">Notenverwaltung (User)</a>
-      <a href="{{ path('settings') }}" class="list-group-item list-group-item-action">Einstellungen (User)</a>
-      <a href="{{ path('year') }}" class="list-group-item list-group-item-action">Schuljahre (User)</a>
+      <a href="{{ path('settings') }}" class="list-group-item list-group-item-action"><i class="fas fa-cogs"></i> {% trans %}Einstellungen{% endtrans %}</a>
+      <a href="{{ path('year') }}" class="list-group-item list-group-item-action"><i class="fas fa-calendar-alt"></i> {% trans %}Schuljahre{% endtrans %}</a>
     </div>
 </div>
 {% endblock %}

@@ -52,11 +52,6 @@ class Mark
      */
     private $is_active;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\SchoolYear", inversedBy="marks")
-     */
-    private $schoolyear;
-
     public function __construct() {
         $this->created_at = new \Datetime();
         $this->is_active = true;
@@ -135,18 +130,6 @@ class Mark
     public function setIsActive(bool $is_active): self
     {
         $this->is_active = $is_active;
-
-        return $this;
-    }
-
-    public function getSchoolyear(): ?SchoolYear
-    {
-        return $this->schoolyear;
-    }
-
-    public function setSchoolyear(?SchoolYear $schoolyear): self
-    {
-        $this->schoolyear = $schoolyear;
 
         return $this;
     }

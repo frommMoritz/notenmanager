@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SchoolYearRepository")
@@ -20,6 +21,12 @@ class SchoolYear
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 50,
+     *      minMessage="Der Name muss mindestens 2 Zeichen lang seien",
+     *      maxMessage="Der Name darf maximal 50 Zeichen lang seien",
+     * )
      */
     private $name;
 
@@ -27,11 +34,6 @@ class SchoolYear
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="schoolYears")
      */
     private $user;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Mark", mappedBy="schoolyear")
-     */
-    private $marks;
 
     /**
      * @ORM\Column(type="datetime")
@@ -79,37 +81,6 @@ class SchoolYear
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Mark[]
-     */
-    public function getMarks(): Collection
-    {
-        return $this->marks;
-    }
-
-    public function addMark(Mark $mark): self
-    {
-        if (!$this->marks->contains($mark)) {
-            $this->marks[] = $mark;
-            $mark->setSchoolyear($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMark(Mark $mark): self
-    {
-        if ($this->marks->contains($mark)) {
-            $this->marks->removeElement($mark);
-            // set the owning side to null (unless already changed)
-            if ($mark->getSchoolyear() === $this) {
-                $mark->setSchoolyear(null);
-            }
-        }
 
         return $this;
     }

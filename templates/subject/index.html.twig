@@ -6,12 +6,12 @@
 
 <div class="container">
     <br>
-
     <h1>{% trans %}Alle Fächer {% endtrans %}</h1>
-    <a href="{{path("year", {"year": year.id})}}"><i class="fas fa-long-arrow-alt-left"></i> {% trans %}Zurück{% endtrans %}</a>
+    <a href="{{path("year")}}"><i class="fas fa-long-arrow-alt-left"></i> {% trans %}Zurück{% endtrans %}</a>
     <br>
+    <a href="{{path("subject_add", {"year": year.id})}}"><i class="fas fa-plus-square"></i> {% trans %}Neues Schuljahr{% endtrans %}</a>
     <br>
-    <ul class="list-group">
+    <div class="table-responsive">
         <table class="table">
             <thead>
                 <th>{% trans %}Name{% endtrans %}</th>
@@ -27,12 +27,12 @@
                     <td>{{subject.createdAt|date('Y-m-d G:i:s')}}</td>
                     <td>{{subject.changedAt|date('Y-m-d G:i:s')}}</td>
                     <td>{{averages[loop.index-1].mark}}</td>
-                    <td></td>
+                    <td><a href="{{path('subject_edit', {'subject': subject.id})}}"><i class="fas fa-edit"></i></a></td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-    </ul>
+    </div>
     <a href="{{path('subject_add', {"year": year.id})}}"><i class="fas fa-plus-square"></i> {% trans %}Neues Fach hinzufügen{% endtrans %}</a>
 </div>
 {% endblock %}

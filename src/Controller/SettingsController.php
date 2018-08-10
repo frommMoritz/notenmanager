@@ -79,10 +79,8 @@ class SettingsController extends Controller
                     $subjects = $subjectRepository->findBy(['schoolyear' => $year->getId()]);
                     foreach ($subjects as $subject) {
                         foreach ($subject->getMarks() as $mark) {
-                            dump([$mark->getMark(), $markRange['best'], $markRange['worst'], 1, 6]);
                             $map = $this->map($mark->getMark(), $oldRange['best'], $oldRange['worst'], 10, 60);
                             $map = $this->map($map, 10, 60, $markRange['best'], $markRange['worst']);
-                            dump($mark->getMark() . ' => ' . $map);
                             $mark->setMark($map);
                             $entityManager->persist($mark);
                             $entityManager->flush();

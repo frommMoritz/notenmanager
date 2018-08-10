@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SubjectRepository")
@@ -19,8 +21,14 @@ class Subject
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
+     * @ORM\Column(type="string", length=70)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 50,
+     *      minMessage="Der Name mus mindestens 2 Zeichen lang seien",
+     *      maxMessage="Der Name darf maximal 60 Zeichen lang seien",
+     * )
+     * */
     private $name;
 
     /**
@@ -45,10 +53,16 @@ class Subject
 
     private $average;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $is_template;
+
     public function __construct()
     {
         $this->marks = new ArrayCollection();
         $this->created_at = new \Datetime();
+        $this->is_template = false;
     }
 
     public function getId()
@@ -141,5 +155,17 @@ class Subject
 
     public function setAverage($average) {
         $this->average = $average;
+    }
+
+    public function getIsTemplate(): ?bool
+    {
+        return $this->is_template;
+    }
+
+    public function setIsTemplate(bool $is_template): self
+    {
+        $this->is_template = $is_template;
+
+        return $this;
     }
 }

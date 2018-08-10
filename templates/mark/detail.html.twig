@@ -8,9 +8,9 @@
     <br>
     <h1>{% trans with {'%subjectName%': subject.name|trans()}%}Deine Noten in %subjectName%{% endtrans %}</h1>
     <br>
-    <a href="{{path("mark_list_subjects")}}">{% trans %}Zurück{% endtrans %}</a>
+    <a href="{{path("subject_list_all", {"year": subject.schoolyear.id})}}"><i class="fas fa-long-arrow-alt-left"></i> {% trans %}Zurück{% endtrans %}</a>
     <br>
-    <a href="{{path("mark_add", {"subject":subject.id, "year": subject.schoolyear.id})}}">{% trans %}Neue Note{% endtrans %}</a>
+    <a href="{{path("mark_add", {"subject":subject.id, "year": subject.schoolyear.id})}}"><i class="fa fa-plus-square"></i> {% trans %}Neue Note{% endtrans %}</a>
     <br>
     <div class="table-responsive">
         <table class="table table-bordered">

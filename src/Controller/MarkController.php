@@ -51,38 +51,6 @@ class MarkController extends AbstractController
     public function index()
     {
         return $this->redirectToRoute('year');
-
-        $subjects = $this->getDoctrine()->getRepository(Subject::class)->findall();
-        foreach ($subjects as $item) {
-            $_marks = $item->getMarks();
-            $marks = [];
-            $markRange = $this->getUser()->getMarkRange();
-            foreach ($_marks as $item) {
-                    $marks[] = $item->getMark();
-            }
-            if(count($marks)) {
-                $marks = array_filter($marks);
-                $avgMark = array_sum($marks)/count($marks);
-                $map = $this->map($avgMark, $markRange['best'], $markRange['worst'], 1, 6);
-                if ($map < 2.49) {
-                    $markColor = 'text-success';
-                } elseif ($map < 4.49) {
-                    $markColor = 'text-warning';
-                } else {
-                    $markColor = 'text-danger';
-                }
-                $averages[] = [
-                    'mark' => round($avgMark, $markRange['round']),
-                    'markClass' => $markColor
-                ];
-            } else {
-                $averages[] = [
-                      "mark" => 'n/a',
-                   "markClass" => "text-muted"
-                ];
-            }
-        }
-        return $this->render('mark/index.html.twig', compact('subjects', 'averages'));
     }
 
     /**
@@ -124,8 +92,6 @@ class MarkController extends AbstractController
         return $this->render('mark/detail.html.twig', compact('marks', 'subject', 'round'));
     }
 
-
-
     /**
      * @Route("/mark/edit/{mark}", name="mark_edit")
      */
@@ -159,9 +125,7 @@ class MarkController extends AbstractController
 
 
         $deleteForm = $this->createFormBuilder([])
-        ->setAction($this->generateUrl('mark_delete', ['mark' => $mark->getId()]))
             ->add('submit', SubmitType::class, ['label' => 'Löschen', 'attr' => ['class' => 'btn-danger']])
-            ->setMethod('DELETE')
             ->getForm();
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -202,6 +166,7 @@ class MarkController extends AbstractController
             $subject = $subjectRepository->find($subject);
         }
         dump($subject);
+        $markRange = $this->getUser()->getMarkRange();
         $subjects = $subjectRepository->findBy(['schoolyear' => $year]);
         $mark = new Mark();
         $mark->setSubject((!$subject) ? new Subject() : $subject);
@@ -217,7 +182,10 @@ class MarkController extends AbstractController
                 }, 'choice_value' => function (Subject $subject) {
                     /** @var Subject $subject */
                     return $subject->getId();
-                }
+                }, 'attr' => [
+                'min' => ($markRange['best'] > $markRange['worst'] ? $markRange['worst'] : $markRange['best']),
+                'max' => ($markRange['best'] < $markRange['worst'] ? $markRange['worst'] : $markRange['best']),
+                ]
             ])
             ->add('submit', SubmitType::class, ['label' => 'Speichern'])
             ->getForm();
@@ -241,24 +209,4 @@ class MarkController extends AbstractController
         return $this->render('mark/add.html.twig', compact('form', 'title'));
     }
 
-    /**
-     * @Route("/mark/delete/{mark}", name="mark_delete", methods={"DELETE"})
-     */
-    public function delete(Mark $mark) {
-
-
-        if (($this->getUser()->getId() != $mark->getUser()->getId()) && !$authChecker->isGranted('ROLE_ADMIN')) {
-            throw $this->createAccessDeniedException($this->translator->trans('Du hast keien Rechte auf diese Seite zuzugreifen'));
-        }
-
-        $entityManager = $this->getDoctrine()->getManager();
-
-
-        $subjectId = $mark->getSubject()->getId();
-        $entityManager->remove($mark);
-        $entityManager->flush();
-        $this->addFlash('success', 'Löschen der Note erfolgreich!');
-        return $this->redirectToRoute('mark_detailed_view', ['subject' => $subjectId]);
-
-    }
 }
