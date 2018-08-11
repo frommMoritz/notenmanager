@@ -53,7 +53,7 @@ class AdminController extends AbstractController
         return $this->render('admin/index.html.twig', compact('users'));
     }
     /**
-     * @Route("/admin/user/edit/{user}", name="admin_user_edit")
+     * @Route("/admin/user/{user}/edit", name="admin_user_edit")
      */
 
      public function user_edit(User $user, Request $request) {  
@@ -78,7 +78,7 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
 
-            $formData->getNormData();
+            $formData = $form->getNormData();
             $user->setEmail($formData->getEmail());
             
             $entityManager->persist($user);
@@ -92,7 +92,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/user/newpass/{user}", name="admin_user_newpass")
+     * @Route("/admin/user/{user}/newpass", name="admin_user_newpass")
      */
     public function user_newpass(User $user, Request $request, UserPasswordEncoderInterface $passwordEncoder) {
         $this->denyAccessUnlessGranted("ROLE_ADMIN");

@@ -41,5 +41,19 @@ return [
     'Schlechteste Note' => 'Worst mark',
     'Alte Noten Anpassen?' => 'Adjust old marks?',
     'Abmelden' => 'Logout',
-    'Erstellt' => 'Erstellt'
+    'Erstellt' => 'Erstellt',
+    'Einstellungen' => 'Settings',
+    'Schuljahre' => 'Schoolyears',
+    'Deine Schuljahre' => 'Your Schoolyears',
+    'Neues Schuljahr' => 'New Schoolyear',
+    'Neues Schuljahr hinzufügen' => 'Add new Schoolyear',
+    'Fächer' => 'Subjects',
+    'Schuljahr' => 'Schoolyear',
+    'Neues Schulfach hinzufügen' => 'Add new Subject',
+    'Fach als Vorlage Markieren' => 'Mark subject as template',
+    'Gewichtung' => 'Weight',
+    'Runden auf n stellen' => 'Round to n places after decimal',
+    'Neues Schuljahr erstellen' => 'Create new Schoolyear',
+    'nie' => 'never',
+    'Adminpanel' => 'Adminpanel'
 ];

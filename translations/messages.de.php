@@ -41,7 +41,6 @@ return [
     'Alte Noten Anpassen?' => 'Alte Noten Anpassen?',
     'Abmelden' => 'Abmelden',
     'Erstellt' => 'Erstellt',
-
     'Einstellungen' => 'Einstellungen',
     'Schuljahre' => 'Schuljahre',
     'Deine Schuljahre' => 'Deine Schuljahre',
@@ -53,5 +52,7 @@ return [
     'Fach als Vorlage Markieren' => 'Fach als Vorlage Markieren',
     'Gewichtung' => 'Gewichtung',
     'Runden auf n stellen' => 'Runden auf n stellen',
-    'Neues Schuljahr erstellen' => 'Neues Schuljahr erstellen'
+    'Neues Schuljahr erstellen' => 'Neues Schuljahr erstellen',
+    'nie' => 'nie',
+    'Adminpanel' => 'Adminpanel'
 ];
