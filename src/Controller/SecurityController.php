@@ -83,14 +83,12 @@ class SecurityController extends Controller
             $user->setPassword($password);
             $errors = $validator->validate($user);
             if (count($errors) > 0) {
-                dump($errors);
                 foreach ($errors as $item) {
                     $this->addFlash('warning', $item);
                 }
                 return $this->redirectToRoute('security_register');
             }
             // 4) save the User!
-            dump($user);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();

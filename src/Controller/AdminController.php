@@ -74,7 +74,6 @@ class AdminController extends AbstractController
                 'choices' => ['ROLE_ADMIN', 'ROLE_SUPPORT', 'ROLE_USER'],
                 'multiple' => true,
                 'choice_label' => function($role, $key, $item) {
-                    dump($role);
                     return $role;
                 }, 'choice_value' => function($role) {
                     return $role;

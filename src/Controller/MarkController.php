@@ -135,7 +135,6 @@ class MarkController extends AbstractController
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $formData = $editForm->getNormData();
             $formData->setChangedAt(new \Datetime());
-            dump($formData);
             $entityManager->persist($formData);
             $entityManager->flush();
             $this->addFlash('success', $this->translator->trans('Änderungen erfolgreich'));
@@ -191,7 +190,6 @@ class MarkController extends AbstractController
         if ($subject !== null) {
             $subject = $subjectRepository->find($subject);
         }
-        dump($subject);
         $markRange = $this->getUser()->getMarkRange();
         $subjects = $subjectRepository->findBy(['schoolyear' => $year]);
         $mark = new Mark();
