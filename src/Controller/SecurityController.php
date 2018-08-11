@@ -70,13 +70,13 @@ class SecurityController extends Controller
             ])
         ->add('registrieren', SubmitType::class, ['label' => 'Registrieren'])
         ->getForm();
-
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = new User();
             $formData = $form->getNormData();
             $user->setUsername($formData->getUsername());
             $user->setEmail($formData->getEmail());
+            $user->setPassword($formData->getPassword());
 
             // 3) Encode the password (you could also do this via Doctrine listener)
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());

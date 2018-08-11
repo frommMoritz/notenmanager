@@ -94,17 +94,18 @@ class YearController extends Controller
             $formData = $form->getNormData();
             $formData->setChangedAt(new \Datetime());
             $formData->setUser($this->getUser());
-            $subjects = null;
+            $subjects = [];
             foreach ($formData->getSubjects() as $subject) {
-                $s = clone($subject);
+                $subjects[] = clone($subject);
                 $formData->removeSubject($subject);
-                $formData->addSubject($s);
-                $entityManager->persist($s);
-                $entityManager->flush();
-                dump($formData);
             }
             $entityManager->persist($formData);
             $entityManager->flush();
+            foreach ($subjects as $subject) {
+                $formData->addSubject($subject);
+                $entityManager->persist($subject);
+                $entityManager->flush();
+            }
             return $this->redirectToRoute('year');
         }
         $form = $form->createView();

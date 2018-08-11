@@ -56,7 +56,7 @@ class SubjectController extends AbstractController
                 }
                 ]);
             if ($this->authChecker->isGranted('ROLE_ADMIN')) {
-                $form->add('is_template', CheckboxType::class, ['label' => 'Fach als Vorlage Markieren']);
+                $form->add('is_template', CheckboxType::class, ['label' => 'Fach als Vorlage Markieren', 'required' => false]);
             }
 
 
@@ -138,7 +138,7 @@ class SubjectController extends AbstractController
         $form = $this->createFormBuilder($subject)
             ->add('name', TextType::class);
             if ($this->authChecker->isGranted('ROLE_ADMIN')) {
-                $form->add('is_template', CheckboxType::class, ['label' => 'Fach als Vorlage Markieren']);
+                $form->add('is_template', CheckboxType::class, ['label' => 'Fach als Vorlage Markieren', 'required' => false]);
             }
         $form = $form
             ->add('save', SubmitType::class, ['label' => 'Speichern'])

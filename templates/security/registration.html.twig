@@ -9,5 +9,6 @@
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}
+    <a href="{{path("security_login")}}">{% trans %}Bereits einen Account? Anmelden{% endtrans %}</a>
 </div>
 {% endblock %}

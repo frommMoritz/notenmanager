@@ -1,20 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello {{ controller_name }}!{% endblock %}
+{% block title %}{% trans %}Adminpanel{% endtrans %}{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'src/Controller/AdminController.php'|file_link(0) }}">src/Controller/AdminController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'templates/admin/index.html.twig'|file_link(0) }}">templates/admin/index.html.twig</a></code></li>
-    </ul>
+<div class="container">
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>username</th>
+                        <th>email</th>
+                        <th>roles</th>
+                        <th>created_at</th>
+                        <th>changed_at</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                  <tbody>
+                {% for user in users %}
+                    <tr>
+                        <th scope="row">{{user.id}}</th>
+                        <td>{{user.username}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.roles|join(',')}}</td>
+                        <td>{{user.createdAt|date('Y-m-d G:i:s')}}</td>
+                        <td>{{user.changedAt|date('Y-m-d G:i:s')}}</td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
 </div>
 {% endblock %}

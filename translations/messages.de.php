@@ -52,5 +52,6 @@ return [
     'Neues Schulfach hinzufügen' => 'Neues Schulfach hinzufügen',
     'Fach als Vorlage Markieren' => 'Fach als Vorlage Markieren',
     'Gewichtung' => 'Gewichtung',
-    'Runden auf n stellen' => 'Runden auf n stellen'
+    'Runden auf n stellen' => 'Runden auf n stellen',
+    'Neues Schuljahr erstellen' => 'Neues Schuljahr erstellen'
 ];

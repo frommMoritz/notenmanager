@@ -35,7 +35,7 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=190, unique=true)
      * @Assert\NotBlank()
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email.",
@@ -66,11 +66,21 @@ class User implements UserInterface, \Serializable
      */
     private $schoolYears;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created_at;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $changed_at;
+
     public function __construct() {
         $this->isActive = true;
         $this->roles = 'ROLE_USER';
-        $this->userSettings = new ArrayCollection();
         $this->schoolYears = new ArrayCollection();
+        $this->created_at = new \Datetime();
     }
 
     public function getId()
@@ -217,6 +227,30 @@ class User implements UserInterface, \Serializable
                 $schoolYear->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getChangedAt(): ?\DateTimeInterface
+    {
+        return $this->changed_at;
+    }
+
+    public function setChangedAt(?\DateTimeInterface $changed_at): self
+    {
+        $this->changed_at = $changed_at;
 
         return $this;
     }

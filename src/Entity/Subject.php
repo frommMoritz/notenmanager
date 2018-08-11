@@ -65,6 +65,13 @@ class Subject
         $this->is_template = false;
     }
 
+    public function __clone() {
+        $this->id = null;
+        $this->marks = new ArrayCollection();
+        $this->created_at = new \Datetime();
+        $this->is_template = false;
+    }
+
     public function getId()
     {
         return $this->id;

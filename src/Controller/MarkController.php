@@ -126,7 +126,7 @@ class MarkController extends AbstractController
                     return $subject->getId();
                 }
                 ])
-            ->add('weight', NumberType::class, ['label' => 'Gewichtung', 'help' => 'Aktuell musst du um eine Note zu löschen, einfach ihre gewichtung auf 0 setzen'])
+            ->add('weight', NumberType::class, ['label' => 'Gewichtung'])
             ->add('submit', SubmitType::class, ['label' => 'Speichern'])
             ->getForm();
 
