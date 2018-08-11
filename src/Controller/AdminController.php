@@ -56,7 +56,7 @@ class AdminController extends AbstractController
      * @Route("/admin/user/edit/{user}", name="admin_user_edit")
      */
 
-     public function user_edit(User $user, Request $request) {
+     public function user_edit(User $user, Request $request) {  
         $this->denyAccessUnlessGranted("ROLE_ADMIN");
         $form = $this->createFormBuilder($user)
             ->add('username', TextType::class, [

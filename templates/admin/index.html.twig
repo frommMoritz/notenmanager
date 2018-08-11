@@ -30,7 +30,11 @@
                             <td>{{user.email}}</td>
                             <td>{{user.roles|join(',')}}</td>
                             <td>{{user.createdAt|date('Y-m-d G:i:s')}}</td>
-                            <td>{{user.changedAt|date('Y-m-d G:i:s')}}</td>
+                            {% if user.changedAt is null %}
+                                <td>{% trans %}nie{% endtrans %}</td>
+                            {% else %}
+                                <td>{{user.changedAt|date('Y-m-d G:i:s')}}</td>
+                            {% endif %}
                             <td><a href="{{path("admin_user_edit", {"user": user.id})}}"><i class="fa fa-user-cog"></i></a> <a href="{{path("admin_user_newpass", {"user": user.id})}}"><i class="fas fa-key"></i></a></td>
                         </tr>
                     {% endfor %}
