@@ -54,5 +54,6 @@ return [
     'Runden auf n stellen' => 'Runden auf n stellen',
     'Neues Schuljahr erstellen' => 'Neues Schuljahr erstellen',
     'nie' => 'nie',
-    'Adminpanel' => 'Adminpanel'
+    'Adminpanel' => 'Adminpanel',
+    'Keinen Account? Registrieren' => 'Keinen Account? Jetzt Registrieren'
 ];

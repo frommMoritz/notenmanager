@@ -78,7 +78,6 @@ class SecurityController extends Controller
             $user->setEmail($formData->getEmail());
             $user->setPassword($formData->getPassword());
 
-            // 3) Encode the password (you could also do this via Doctrine listener)
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
             $errors = $validator->validate($user);
@@ -88,8 +87,14 @@ class SecurityController extends Controller
                 }
                 return $this->redirectToRoute('security_register');
             }
-            // 4) save the User!
             $entityManager = $this->getDoctrine()->getManager();
+            $userRepository = $this->getDoctrine()->getRepository(User::class);
+
+            // When this is the first user to be registered, give him admin permissions
+            $userCount = count($userRepository->findAll());
+            if ($userCount == 0) {
+                $formData->setRoles(['ROLE_ADMIN']);
+            }
             $entityManager->persist($user);
             $entityManager->flush();
 

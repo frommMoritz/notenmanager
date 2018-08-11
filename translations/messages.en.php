@@ -55,5 +55,6 @@ return [
     'Runden auf n stellen' => 'Round to n places after decimal',
     'Neues Schuljahr erstellen' => 'Create new Schoolyear',
     'nie' => 'never',
-    'Adminpanel' => 'Adminpanel'
+    'Adminpanel' => 'Adminpanel',
+    'Keinen Account? Registrieren' => 'No Account? Register now'
 ];
