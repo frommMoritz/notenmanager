@@ -131,9 +131,9 @@ class SubjectController extends AbstractController
     }
 
     /**
-     * @Route("/subject/edit/{subject}/", name="subject_edit", methods={"GET","HEAD"})
+     * @Route("/subject/edit/{subject}/", name="subject_edit")
      */
-    public function edit(Subject $subject) {
+    public function edit(Subject $subject, Request $request) {
 
         $form = $this->createFormBuilder($subject)
             ->add('name', TextType::class);
@@ -142,52 +142,19 @@ class SubjectController extends AbstractController
             }
         $form = $form
             ->add('save', SubmitType::class, ['label' => 'Speichern'])
-            ->getForm()
-            ->createView();
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager  = $this->getDoctrine()->getManager();
+            $formData = $form->getNormData();
+            $entityManager->persist($formData);
+            $entityManager->flush();
+            $this->addFlash("success", "Gespeichert!");
+            return $this->redirectToRoute('subject_list_all', ['year' => $subject->getSchoolYear()->getId()]);
+        }
+
+        $form = $form->createView();
         return $this->render('subject/edit.html.twig', compact('subject', 'form'));
-    }
-
-    /**
-     * @Route("/subject/edit/{subject}/", name="subject_edit_save", methods={"POST","PUT"})
-     */
-    public function edit_save(Request $request, Subject $subject) {
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $form = $request->request->get('form');
-        $subject->setName($form['name']);
-        $entityManager->persist($subject);
-        $entityManager->flush();
-        $this->addFlash('highlight', $subject->getId());
-        $this->addFlash('success', $this->translator->trans('Gespeichert!'));
-        return $this->redirectToRoute('subject_list_all', ['year' => $subject->getSchoolYear()->getId()]);
-    }
-
-    /**
-     * @Route("/subject/add/", name="subject_add_legacy", methods={"GET","HEAD"})
-     */
-
-    public function add_legacy() {
-        $form = $this->createFormBuilder(new Subject)
-            ->add('name', TextType::class)
-            ->add('save', SubmitType::class, ['label' => 'Hinzufügen'])
-            ->getForm()
-            ->createView();
-        return $this->render('subject/add_legacy.html.twig', compact('subject', 'form'));
-    }
-
-    /**
-     * @Route("/subject/add/", name="subject_add_save", methods={"POST","PUT"})
-     */
-    public function add_save(Request $request) {
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $form = $request->request->get('form');
-        $subject = new Subject();
-        $subject->setName($form['name']);
-        $entityManager->persist($subject);
-        $entityManager->flush();
-        $this->addFlash('highlight', $subject->getId());
-        $this->addFlash('success', $this->translator->trans('Fach erfolgreich hinzugefügt!'));
-        return $this->redirectToRoute('subject_list_all', ['year' => $subject->getSchoolYear()->getId()]);
     }
 }
