@@ -91,6 +91,13 @@ class AdminController extends AbstractController
 
             $formData = $form->getNormData();
             $user->setEmail($formData->getEmail());
+
+            if ($user->getId() == $this->getUser()->getId()) {
+                if (!in_array('ROLE_ADMIN', $formData->getRoles())) {
+                    $this->addFlash("danger", $this->translator->trans("Du kannst dir nicht selber die Adminisrative Rolle entfernen"));
+                    return $this->redirectToRoute("admin_dashboard");
+                }
+            }
             
             $entityManager->persist($user);
             $entityManager->flush();
