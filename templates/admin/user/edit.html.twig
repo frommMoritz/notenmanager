@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans with {'%userName%': user.username} %}Nutzer %userName% bearbeiten{% endtrans %}{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>{% trans with {'%userName%': user.username} %}Nutzer %userName% bearbeiten{% endtrans %}</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+</div>
+{% endblock %}

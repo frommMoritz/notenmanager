@@ -38,7 +38,7 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=190, unique=true)
      * @Assert\NotBlank()
      * @Assert\Email(
-     *     message = "The email '{{ value }}' is not a valid email.",
+     *     message = "Die Email '{{ value }}' ist nicht valide",
      *     checkMX = true
      * )
      */

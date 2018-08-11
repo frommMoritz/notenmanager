@@ -4,36 +4,40 @@
 
 {% block body %}
 <div class="container">
+    <br>
+    <h1>{% trans %}Adminpanel{% endtrans %}</h1>
+    <br
     <div class="row">
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>username</th>
-                        <th>email</th>
-                        <th>roles</th>
-                        <th>created_at</th>
-                        <th>changed_at</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                  <tbody>
-                {% for user in users %}
-                    <tr>
-                        <th scope="row">{{user.id}}</th>
-                        <td>{{user.username}}</td>
-                        <td>{{user.email}}</td>
-                        <td>{{user.roles|join(',')}}</td>
-                        <td>{{user.createdAt|date('Y-m-d G:i:s')}}</td>
-                        <td>{{user.changedAt|date('Y-m-d G:i:s')}}</td>
-                        <td></td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+        <div class="col-sm">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>username</th>
+                            <th>email</th>
+                            <th>roles</th>
+                            <th>created_at</th>
+                            <th>changed_at</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <th scope="row">{{user.id}}</th>
+                            <td>{{user.username}}</td>
+                            <td>{{user.email}}</td>
+                            <td>{{user.roles|join(',')}}</td>
+                            <td>{{user.createdAt|date('Y-m-d G:i:s')}}</td>
+                            <td>{{user.changedAt|date('Y-m-d G:i:s')}}</td>
+                            <td><a href="{{path("admin_user_edit", {"user": user.id})}}"><i class="fa fa-user-cog"></i></a> <a href="{{path("admin_user_newpass", {"user": user.id})}}"><i class="fas fa-key"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-        
     </div>
 </div>
 {% endblock %}
