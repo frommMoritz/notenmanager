@@ -82,6 +82,7 @@ class YearController extends Controller
                 'choices' => $templates,
                 'multiple' => true,
                 'required' => false,
+                'help' => 'Bei den hier gezeigten Fächern handelt es sich lediglich um einige Fächer welche oft genutzt werden. Eigene Fächer kannst du nach dem Erstellen des Schuljahres anlegen.',
                 'choice_label' => function ($template)  {
                     return $template->getName();
                 },
