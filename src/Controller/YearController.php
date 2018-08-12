@@ -7,6 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 use App\Entity\SchoolYear;
 use App\Entity\Subject;
+use App\Entity\Template;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -68,22 +70,25 @@ class YearController extends Controller
      * @Route("/year/add", name="year_add")
      */
     public function add(Request $request) {
-        $subjects = $this->getDoctrine()->getRepository(Subject::class)->findBy(['is_template' => true]);
+        $entityManager = $this->getDoctrine()->getManager(); 
+        $subjectRepository = $this->getDoctrine()->getRepository(Subject::class);
+        $templateRepository = $this->getDoctrine()->getRepository(Template::class);
+        $templates = $templateRepository->findBy(['global' => true]);
+        dump($templates);
         $form = $this->createFormBuilder(new SchoolYear())
             ->add('name', TextType::class, ['label' => 'Name'])
-            ->add('subjects', ChoiceType::class, [
+            ->add('subjects', EntityType::class, [
                 'label' => 'Fächer',
-                'required' => false,
+                'class' => Template::class,
+                'choices' => $templates,
                 'multiple' => true,
-                'expanded' => false,
-                'data' => $subjects,
-                'choices' => $subjects,
-                'choice_label' => function($subject, $key, $value) {
-                    /** @var Subject $subject */
-                    return $subject->getName();
+                'required' => false,
+                'choice_label' => function ($template)  {
+                    dump($template->getName());
+                    return $template->getName();
                 },
-                'choice_value' => function($subject) {
-                    return $subject->getId();
+                'choice_value' => function (Template $template = null) {
+                    return $template ? $template->getName() : '';
                 }
                 ])
             ->add('save', SubmitType::class, ['label' => 'Hinzufügen'])
@@ -92,20 +97,20 @@ class YearController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $formData = $form->getNormData();
-            $formData->setChangedAt(new \Datetime());
+            $subjects = $formData->getSubjects();
+            $formData->removeAllSubjects();
             $formData->setUser($this->getUser());
-            $subjects = [];
-            foreach ($formData->getSubjects() as $subject) {
-                $subjects[] = clone($subject);
-                $formData->removeSubject($subject);
-            }
             $entityManager->persist($formData);
-            $entityManager->flush();
-            foreach ($subjects as $subject) {
+            foreach ($subjects as $_subject) {
+                dump(get_class_methods($_subject));
+                $subject = new Subject();
+                $subject->setName($_subject->getName());
                 $formData->addSubject($subject);
                 $entityManager->persist($subject);
                 $entityManager->flush();
             }
+            $entityManager->flush();
+
             return $this->redirectToRoute('year');
         }
         $form = $form->createView();

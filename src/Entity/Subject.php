@@ -52,24 +52,10 @@ class Subject
     private $changed_at;
 
     private $average;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $is_template;
-
     public function __construct()
     {
         $this->marks = new ArrayCollection();
         $this->created_at = new \Datetime();
-        $this->is_template = false;
-    }
-
-    public function __clone() {
-        $this->id = null;
-        $this->marks = new ArrayCollection();
-        $this->created_at = new \Datetime();
-        $this->is_template = false;
     }
 
     public function getId()
@@ -162,17 +148,5 @@ class Subject
 
     public function setAverage($average) {
         $this->average = $average;
-    }
-
-    public function getIsTemplate(): ?bool
-    {
-        return $this->is_template;
-    }
-
-    public function setIsTemplate(bool $is_template): self
-    {
-        $this->is_template = $is_template;
-
-        return $this;
     }
 }
