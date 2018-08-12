@@ -68,7 +68,7 @@ class SubjectController extends AbstractController
                 $entityManager->flush();
                 $this->addFlash('success', $this->translator->trans("Fach erfolgreich hinzugefügt"));
                 $this->addFlash('highlight', $formData->getId());
-                return $this->redirectToRoute("subject_list_all", ['year'=> $year->getId()]);
+                return $this->redirectToRoute("subject_list_all", ['year'=> $formData->getSchoolYear()->getId()]);
             }
             $form = $form->createView();
             return $this->render('subject/add.html.twig', compact('form'));
