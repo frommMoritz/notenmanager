@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}Vorlagen{% endtrans %}{% endblock %}
+
+{% block body %}
+<div class="container">
+    <br>
+    <h1>{% trans %}Vorlagen{% endtrans %}</h1>
+    <br
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>name</th>
+                    <th>ersteller</th>
+                    <th>created_at</th>
+                    <th>changed_at</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for template in templates %}
+                <tr>
+                    <th scope="row">{{template.id}}</th>
+                    <td>{{template.name}}</td>
+                    <td>{{template.creator.username}}</td>
+                    <td>{{template.createdAt|date('Y-m-d G:i:s')}}</td>
+                    {% if template.changedAt is null %}
+                        <td>{% trans %}nie{% endtrans %}</td>
+                    {% else %}
+                        <td>{{template.changedAt|date('Y-m-d G:i:s')}}</td>
+                    {% endif %}
+                    <td></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -8,6 +8,7 @@ use App\Entity\Subject;
 use App\Entity\SchoolYear;
 use App\Entity\Mark;
 use App\Entity\User;
+use App\Entity\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,13 +51,15 @@ class AdminController extends AbstractController
         $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
         $this->denyAccessUnlessGranted("ROLE_ADMIN");
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
-        return $this->render('admin/index.html.twig', compact('users'));
+        $templates = $this->getDoctrine()->getRepository(Template::class)->findAll();
+        return $this->render('admin/index.html.twig', compact('users', 'templates'));
     }
     /**
      * @Route("/admin/user/{user}/edit", name="admin_user_edit")
      */
 
      public function user_edit(User $user, Request $request) {  
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
         $this->denyAccessUnlessGranted("ROLE_ADMIN");
         $form = $this->createFormBuilder($user)
             ->add('username', TextType::class, [
@@ -112,6 +115,7 @@ class AdminController extends AbstractController
      * @Route("/admin/user/{user}/newpass", name="admin_user_newpass")
      */
     public function user_newpass(User $user, Request $request, UserPasswordEncoderInterface $passwordEncoder) {
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
         $this->denyAccessUnlessGranted("ROLE_ADMIN");
         $form = $this->createFormBuilder([])
             -> add('regenerate', CheckBoxType::class, [
@@ -149,5 +153,16 @@ class AdminController extends AbstractController
 
         $form = $form->createView();
         return $this->render('admin/user/newpass.html.twig', compact('user', 'form'));
+    }
+
+    /**
+     * @Route("/admin/template/", name="admin_template")
+     */
+    public function template() {
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
+        $this->denyAccessUnlessGranted("ROLE_ADMIN");
+        $repository = $this->getDoctrine()->getRepository(Template::class);
+        $templates = $repository->findAll();
+        return $this->render('admin/template/index.html.twig', compact('templates'));
     }
 }
