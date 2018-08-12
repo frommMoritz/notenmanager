@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TemplateRepository")
@@ -18,6 +19,13 @@ class Template
 
     /**
      * @ORM\Column(type="string", length=190)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 25,
+     *      minMessage = "Der Name muss mindestens {{ limit }} Zeichen lang seien",
+     *      maxMessage = "Der Name darf nicht länger als {{ limit }} Zeichen lang seien"
+     * )
      */
     private $name;
 

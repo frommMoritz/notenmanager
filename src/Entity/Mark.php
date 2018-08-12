@@ -22,6 +22,12 @@ class Mark
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 25,
+     *      minMessage = "Die Beschreibung muss mindestens {{ limit }} Zeichen lang seien",
+     *      maxMessage = "Die Beschreibung darf nicht länger als {{ limit }} Zeichen lang seien"
+     * )
      */
     private $mark;
 
