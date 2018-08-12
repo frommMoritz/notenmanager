@@ -78,11 +78,17 @@ class User implements UserInterface, \Serializable
      */
     private $changed_at;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Template", mappedBy="creator")
+     */
+    private $templates;
+
     public function __construct() {
         $this->isActive = true;
         $this->roles = 'ROLE_USER';
         $this->schoolYears = new ArrayCollection();
         $this->created_at = new \Datetime();
+        $this->templates = new ArrayCollection();
     }
 
     public function getId()
@@ -253,6 +259,37 @@ class User implements UserInterface, \Serializable
     public function setChangedAt(?\DateTimeInterface $changed_at): self
     {
         $this->changed_at = $changed_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Template[]
+     */
+    public function getTemplates(): Collection
+    {
+        return $this->templates;
+    }
+
+    public function addTemplate(Template $template): self
+    {
+        if (!$this->templates->contains($template)) {
+            $this->templates[] = $template;
+            $template->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTemplate(Template $template): self
+    {
+        if ($this->templates->contains($template)) {
+            $this->templates->removeElement($template);
+            // set the owning side to null (unless already changed)
+            if ($template->getCreator() === $this) {
+                $template->setCreator(null);
+            }
+        }
 
         return $this;
     }

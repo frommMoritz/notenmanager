@@ -41,7 +41,7 @@ class SchoolYear
     private $created_at;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $changed_at;
 
@@ -138,6 +138,12 @@ class SchoolYear
             }
         }
 
+        return $this;
+    }
+    
+    public function removeAllSubjects():self
+    {
+        $this->subjects = new ArrayCollection();
         return $this;
     }
 }
