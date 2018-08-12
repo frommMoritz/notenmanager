@@ -209,4 +209,43 @@ class AdminController extends AbstractController
         $form = $form->createView();
         return $this->render('admin/template/add.html.twig', compact('form'));
     }
+
+    /**
+     * @Route("/admin/template/edit/{template}", name="admin_template_edit")
+     */
+    public function template_edit(Template $template, Request $request) {
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
+        $this->denyAccessUnlessGranted("ROLE_ADMIN");
+        $form = $this->createFormBuilder($template)
+            ->add('name', TextType::class, [
+                'label' => 'Name',
+                'help' => 'Name der Vorlage wie Nutzer ihn sehen'
+            ])
+            ->add('isglobal', CheckboxType::class, [
+                'label' => 'Vorlage als Global markieren',
+                'help' => 'Aktuell sind allel Vorlagen global, dies wird sich in Zukunft ggf. ändern',
+                'disabled' => true
+            ])
+            ->add('isactive', CheckboxType::class, [
+                'label' => 'Vorlage ist aktiv',
+                'help' => 'Nutzer können diese Vorlage wirklich nutzen',
+                'required' => false
+            ])
+            ->add('add', SubmitType::class, [
+                'label' => 'Änderungen Speichern'
+            ])
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) { 
+            $em = $this->getDoctrine()->getManager();
+            $template = $form->getNormData();
+            $template->setChangedAt(new \Datetime()); 
+            $em->persist($template);
+            $em->flush();
+            $this->addFlash("success", "Hinzufügen erfolgreich!");
+            return $this->redirectToRoute("admin_template");
+        }
+        $form = $form->createView();
+        return $this->render('admin/template/add.html.twig', compact('form'));
+    }
 }

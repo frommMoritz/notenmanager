@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}Fach-Vorlage Bearbeiten{% endtrans %}{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>{% trans %}Fach-Vorlage Bearbeiten{% endtrans %}</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+</div>
+{% endblock %}
