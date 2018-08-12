@@ -74,7 +74,6 @@ class YearController extends Controller
         $subjectRepository = $this->getDoctrine()->getRepository(Subject::class);
         $templateRepository = $this->getDoctrine()->getRepository(Template::class);
         $templates = $templateRepository->findBy(['is_global' => true, 'is_active' => true]);
-        dump($templates);
         $form = $this->createFormBuilder(new SchoolYear())
             ->add('name', TextType::class, ['label' => 'Name'])
             ->add('subjects', EntityType::class, [
@@ -84,7 +83,6 @@ class YearController extends Controller
                 'multiple' => true,
                 'required' => false,
                 'choice_label' => function ($template)  {
-                    dump($template->getName());
                     return $template->getName();
                 },
                 'choice_value' => function (Template $template = null) {
@@ -102,7 +100,6 @@ class YearController extends Controller
             $formData->setUser($this->getUser());
             $entityManager->persist($formData);
             foreach ($subjects as $_subject) {
-                dump(get_class_methods($_subject));
                 $subject = new Subject();
                 $subject->setName($_subject->getName());
                 $formData->addSubject($subject);
