@@ -233,12 +233,4 @@ class MarkController extends AbstractController
         $form = $form->createView();
         return $this->render('mark/add.html.twig', compact('form', 'title'));
     }
-
-    /**
-     * @Route("random", name="mark_random")
-     * @Security("is_granted('ROLE_ADMIN')")
-     */
-    public function random() {
-
-    }
 }
