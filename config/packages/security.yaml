@@ -14,13 +14,18 @@ security:
             anonymous: true
             # http_basic: ~
             # https://symfony.com/doc/current/security/form_login_setup.html
-            switch_user: true
+            switch_user: false
             form_login:
                 login_path: security_login
                 check_path: security_login
                 use_referer: true
                 username_parameter: "form[username]"
                 password_parameter: "form[password]"
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 2678400 # 1 month in seconds
+                remember_me_parameter: security_remember_me
+                path:     /
 
 
             provider: our_db_provider

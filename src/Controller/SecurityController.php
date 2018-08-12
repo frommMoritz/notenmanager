@@ -18,6 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
@@ -43,13 +44,13 @@ class SecurityController extends Controller
         }
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
-        $form = $this->createFormBuilder(new User())
+        $form = $this->createFormBuilder(['remember_me' => true])
             ->add('username', TextType::class, ['label' => 'Nutzername', 'attr' => ['value' => (isset($lastUsername) ? $lastUsername : "")]])
             ->add('password', PasswordType::class, ['label' => 'Passwort'])
+            ->add('remember_me', CheckboxType::class, ['label' => 'Angemeldet bleiben', 'help' => 'Einen Monat angemeldet bleiben'])
             ->add('login', SubmitType::class, ['label' => 'Anmelden'])
             ->getForm()
             ->createView();
-        $lastUsername = $authenticationUtils->getLastUsername();
         return $this->render('security/login.html.twig', compact('error', 'form'));
     }
 
