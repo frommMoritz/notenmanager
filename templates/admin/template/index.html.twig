@@ -6,7 +6,9 @@
 <div class="container">
     <br>
     <h1>{% trans %}Vorlagen{% endtrans %}</h1>
-    <br
+    <br>
+    <a href="{{path("admin_template_add")}}"><i class="fa fa-plus-square"></i> {% trans %} Neue Vorlage hinzufügen{% endtrans %}</a>
+    <br>
     <div class="table-responsive">
         <table class="table">
             <thead>
@@ -16,6 +18,8 @@
                     <th>ersteller</th>
                     <th>created_at</th>
                     <th>changed_at</th>
+                    <th>global</th>
+                    <th>aktiv</th>
                     <th></th>
                 </tr>
             </thead>
@@ -31,6 +35,8 @@
                     {% else %}
                         <td>{{template.changedAt|date('Y-m-d G:i:s')}}</td>
                     {% endif %}
+                    <td><i class="fas {% if template.isglobal %}fa-check-square text-success{% else %}fa-times-circle text-danger{% endif %}"></i></td>
+                    <td><i class="fas {% if template.isactive %}fa-check-square text-success{% else %}fa-times-circle text-danger{% endif %}"></i></td>
                     <td></td>
                 </tr>
             {% endfor %}

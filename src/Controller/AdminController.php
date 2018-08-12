@@ -51,7 +51,7 @@ class AdminController extends AbstractController
         $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
         $this->denyAccessUnlessGranted("ROLE_ADMIN");
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
-        $templates = $this->getDoctrine()->getRepository(Template::class)->findAll();
+        $templates = $this->getDoctrine()->getRepository(Template::class)->findBy(['is_active' => true, 'is_global' => true]);
         return $this->render('admin/index.html.twig', compact('users', 'templates'));
     }
     /**
@@ -164,5 +164,49 @@ class AdminController extends AbstractController
         $repository = $this->getDoctrine()->getRepository(Template::class);
         $templates = $repository->findAll();
         return $this->render('admin/template/index.html.twig', compact('templates'));
+    }
+
+    /**
+     * @Route("/admin/template/add/", name="admin_template_add")
+     */
+
+    public function template_add(Request $request) {
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
+        $this->denyAccessUnlessGranted("ROLE_ADMIN");
+        $template = new Template();
+        $template->setIsGlobal(true);
+        $template->setIsActive(true);
+        $form = $this->createFormBuilder($template)
+            ->add('name', TextType::class, [
+                'label' => 'Name',
+                'help' => 'Name der Vorlage wie Nutzer ihn sehen'
+            ])
+            ->add('isglobal', CheckboxType::class, [
+                'label' => 'Vorlage als Global markieren',
+                'help' => 'Aktuell sind allel Vorlagen global, dies wird sich in Zukunft ggf. ändern',
+                'required' => true,
+                'disabled' => true
+            ])
+            ->add('isactive', CheckboxType::class, [
+                'label' => 'Vorlage ist aktiv',
+                'help' => 'Nutzer können diese Vorlage wirklich nutzen',
+                'required' => false
+            ])
+            ->add('add', SubmitType::class, [
+                'label' => 'Vorlage Hinzufügen'
+            ])
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) { 
+            $em = $this->getDoctrine()->getManager();
+            $template = $form->getNormData();
+            $template->setCreator($this->getUser()); 
+            $em->persist($template);
+            $em->flush();
+            $this->addFlash("success", "Hinzufügen erfolgreich!");
+            return $this->redirectToRoute("admin_template");
+        }
+        $form = $form->createView();
+        return $this->render('admin/template/add.html.twig', compact('form'));
     }
 }

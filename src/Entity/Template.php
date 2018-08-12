@@ -35,12 +35,7 @@ class Template
     private $creator;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $global;
-
-    /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $created_at;
 
@@ -49,9 +44,20 @@ class Template
      */
     private $changed_at;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $is_global;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $is_active;
+
     public function __construct() {
         $this->created_at = new \Datetime();
-        $this->global = false;
+        $this->is_global = false;
+        $this->is_active = true;
     }
 
     public function getId()
@@ -83,18 +89,6 @@ class Template
         return $this;
     }
 
-    public function getGlobal(): ?bool
-    {
-        return $this->global;
-    }
-
-    public function setGlobal(bool $global): self
-    {
-        $this->global = $global;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
@@ -115,6 +109,30 @@ class Template
     public function setChangedAt(?\DateTimeInterface $changed_at): self
     {
         $this->changed_at = $changed_at;
+
+        return $this;
+    }
+
+    public function getIsGlobal(): ?bool
+    {
+        return $this->is_global;
+    }
+
+    public function setIsGlobal(bool $is_global): self
+    {
+        $this->is_global = $is_global;
+
+        return $this;
+    }
+
+    public function getIsActive(): ?bool
+    {
+        return $this->is_active;
+    }
+
+    public function setIsActive(bool $is_active): self
+    {
+        $this->is_active = $is_active;
 
         return $this;
     }

@@ -73,7 +73,7 @@ class YearController extends Controller
         $entityManager = $this->getDoctrine()->getManager(); 
         $subjectRepository = $this->getDoctrine()->getRepository(Subject::class);
         $templateRepository = $this->getDoctrine()->getRepository(Template::class);
-        $templates = $templateRepository->findBy(['global' => true]);
+        $templates = $templateRepository->findBy(['is_global' => true, 'is_active' => true]);
         dump($templates);
         $form = $this->createFormBuilder(new SchoolYear())
             ->add('name', TextType::class, ['label' => 'Name'])
