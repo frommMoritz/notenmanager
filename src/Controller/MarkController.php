@@ -228,7 +228,7 @@ class MarkController extends AbstractController
             $formData = $form->getNormData();
             $entityManager->persist($formData);
             $entityManager->flush();
-            return $this->redirectToRoute("mark_detailed_view", ['subject' => $subject->getId()]);
+            return $this->redirectToRoute("mark_detailed_view", ['subject' => $formData->getSubject()->getId()]);
         }
         $form = $form->createView();
         return $this->render('mark/add.html.twig', compact('form', 'title'));
