@@ -94,7 +94,7 @@ class SecurityController extends Controller
             // When this is the first user to be registered, give him admin permissions
             $userCount = count($userRepository->findAll());
             if ($userCount == 0) {
-                $formData->setRoles(['ROLE_ADMIN']);
+                $user->setRoles(['ROLE_ADMIN']);
             }
             $entityManager->persist($user);
             $entityManager->flush();

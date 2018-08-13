@@ -12,10 +12,3 @@
     <a href="{{path("security_login")}}">{% trans %}Bereits einen Account? Anmelden{% endtrans %}</a>
 </div>
 {% endblock %}
-{% block javascripts %}
-<script>
-    window.onbeforeunload = function() {
-    return "Do you really want to leave our brilliant application?";
-    };
-</script>
-{% endblock %}
