@@ -32,7 +32,7 @@
                         <td>{{mark.createdAt|date('Y-m-d G:i:s')}}</td>
                         <td>{{mark.changedAt|date('Y-m-d G:i:s')}}</td>
                         <td>{{mark.weight}}</td>
-                        <td><a href="{{path('mark_edit', {'mark': mark.id})}}"><i class="fas fa-edit"></i></a><a title="wegrauchen" href="{{path('mark_delete', {'mark': mark.id})}}"><i class="fas fa-joint"></i></a></td>
+                        <td><a href="{{path('mark_edit', {'mark': mark.id})}}"><i class="fas fa-edit"></i></a><a href="{{path('mark_delete', {'mark': mark.id})}}"><i class="fas fa-trash-alt"></i></a></td>
                     </tr>
                 {% endfor %}
             </tbody>
