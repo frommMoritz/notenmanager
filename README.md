@@ -5,7 +5,7 @@
  - MySQL Server (SQLite or Postgres may work, but not testet. You may need to run `php bin/console make:migration` before installing)
  - Apache / Nginx server. (For additional config please read [the symfony docs](https://symfony.com/doc/current/setup/web_server_configuration.html))
 
-## 1. Initial Setup
+### 1. Initial Setup
 To clone the code and install al the dependencies run:
 ```
 git clone https://github.com/frommMoritz/notenmanager
@@ -19,7 +19,7 @@ Now you can run:
 php bin/console doctrine:migration:migrate
 ```
 
-## 2. Updating
+### 2. Updating
 To update simply run:
 ```
 git pull;
@@ -27,3 +27,6 @@ composer install;
 php bin/console doctrine:migration:migrate --no-interaction;
 php bin/console cache:clear --env=prod;
 ```
+
+## Bug reports
+If you encounter any bugs, feel free to [open a issue](https://github.com/frommMoritz/notenmanager/issues/new).
