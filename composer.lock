@@ -4809,16 +4809,16 @@
         },
         {
             "name": "symfony/web-link",
-            "version": "v4.1.3",
+            "version": "v4.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/web-link.git",
-                "reference": "11788d1e5a32783020c261f864422e39bcf044df"
+                "reference": "47b8188b4bb8d24eef0bb287b0737d5b84a6cab8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/web-link/zipball/11788d1e5a32783020c261f864422e39bcf044df",
-                "reference": "11788d1e5a32783020c261f864422e39bcf044df",
+                "url": "https://api.github.com/repos/symfony/web-link/zipball/47b8188b4bb8d24eef0bb287b0737d5b84a6cab8",
+                "reference": "47b8188b4bb8d24eef0bb287b0737d5b84a6cab8",
                 "shasum": ""
             },
             "require": {
@@ -4837,7 +4837,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.1-dev"
+                    "dev-master": "4.2-dev"
                 }
             },
             "autoload": {
@@ -4876,7 +4876,7 @@
                 "psr13",
                 "push"
             ],
-            "time": "2018-07-26T09:10:45+00:00"
+            "time": "2019-01-16T20:31:39+00:00"
         },
         {
             "name": "symfony/yaml",
